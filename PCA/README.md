@@ -5,24 +5,19 @@
 
 2. Let $\mu$ be the data mean $$\mu = \frac{1}{n} \sum_{i=1}^{n}x^i$$ 
 
-2. Let $X_c \in \mathbb{R}^{n \times d}$ be the centralized dataset. 
+3. Let $X_c \in \mathbb{R}^{n \times d}$ be the centralized dataset. 
 
-3. Let $C \in \mathbb{R}^{d \times d}$ be the covariance matrix $$C = cov(x) = \frac{X_c^T X_c}{n-1}$$
+4. Let $C \in \mathbb{R}^{d \times d}$ be the covariance matrix $$C = cov(x) = \frac{X_c^T X_c}{n-1}$$
 
-4. Using Enigenvalue Decomposition, $C = U \Lambda U^T$
+5. Using Enigenvalue Decomposition, $C = U \Lambda U^T$
 	* $U, \Lambda, U^T \in \mathbb{R}^{d \times d}$
 	* $\Lambda = diagonal(\lambda_1, \lambda_2 \cdots \lambda_d)$ such that $\lambda_i > \lambda_{i+1}$
 	* $U = [\vec{U_1} |  \vec{U_2} | \cdots | \vec{U_d}]$ ($\vec{U_i}$ are eigenvectores with corresponding eigenvalue $\lambda_i$)
 
-5. Construct matrix $A \in \mathbb{R}^{q \times d}$ like the following:
-$$A = 
-\begin{bmatrix}
-\vec{U_1}^T \\
-\vec{U_2}^T \\
-\vdots \\
-\vec{U_q}^T
-\end{bmatrix}
-$$ 
+6. Construct matrix $A \in \mathbb{R}^{q \times d}$ like the following:
+
+$$A=\begin{bmatrix}\vec{U_1}^T \\\vec{U_2}^T \\\vdots \\\vec{U_q}^T\end{bmatrix} $$
+
 
 ### Transform
 $$z^i = A(x^i - u)$$
