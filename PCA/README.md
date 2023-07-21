@@ -16,7 +16,7 @@
 
 6. Construct matrix $A \in \mathbb{R}^{q \times d}$ like the following:
 
-$$A=\begin{bmatrix}\vec{U_1}^T \\ \vec{U_2}^T \\ \vdots \\ \vec{U_q}^T\end{bmatrix}$$
+$$A=\begin{bmatrix} \vec{U_1}^T\\ \vec{U_2}^T\\ \vdots\\ \vec{U_q}^T \end{bmatrix}$$
 
 
 ### Transform
