@@ -15,9 +15,9 @@
 	* $U = [\vec{U_1} |  \vec{U_2} | \cdots | \vec{U_d}]$ ($\vec{U_i}$ are eigenvectores with corresponding eigenvalue $\lambda_i$)
 
 6. Construct matrix $A \in \mathbb{R}^{q \times d}$ like the following:
-
+```math
 $$A=\begin{bmatrix} \vec{U_1}^T\\ \vec{U_2}^T\\ \vdots\\ \vec{U_q}^T \end{bmatrix}$$
-
+```
 
 ### Transform
 $$z^i = A(x^i - u)$$
