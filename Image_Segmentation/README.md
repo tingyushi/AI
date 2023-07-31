@@ -1,1 +1,1 @@
-# Image Compression using K-Means
+# Image Segmentation
