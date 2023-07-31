@@ -10,6 +10,6 @@
 * model_data: contains model
 
 ## How to run
-'''
+```
 python Driver.py
-'''
+```
