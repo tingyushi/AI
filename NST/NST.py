@@ -204,7 +204,7 @@ if __name__ == "__main__":
                     ('block5_conv1', 0.2)]
     CONTENT_LAYER = [('block5_conv4', 1)]
     ALPHA = 10 ; BETA = 40
-    EPOCHS = 5000
+    EPOCHS = 2500
     OPTIMIZER = tf.keras.optimizers.Adam(learning_rate=0.001)
 
     if not CONTENT_IMAGE_NAME in os.listdir(INPUT_IMAGE_PATH):
