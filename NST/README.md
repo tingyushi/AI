@@ -14,7 +14,7 @@ $$J_{content}(C,G) =  \frac{1}{4 \times n_H \times n_W \times n_C}\sum _{ \text{
 
 ### Style Cost Function for a layer
 
-$$J_{style}^{[l]}(S,G) $$
+$$J_{style}^{[l]}(S,G) = \frac{1}{4 \times {n_C}^2 \times (n_H \times n_W)^2} $$
 
 * $G_{gram}^{(S)}$ Gram matrix of the "style" image.
 * $G_{gram}^{(G)}$ Gram matrix of the "generated" image.
