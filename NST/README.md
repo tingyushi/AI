@@ -28,3 +28,8 @@ $$J_{style}(S,G) = \sum_{l} \lambda^{[l]} J^{[l]}_{style}(S,G)$$
 
 ## Total Cost function
 $$J(G) = \alpha J_{content}(C,G) + \beta J_{style}(S,G)$$
+
+## How to run
+```
+python NST.py "content file name"  "style file name"  "output file name"
+```
