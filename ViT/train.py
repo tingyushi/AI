@@ -2,11 +2,11 @@ import numpy as np
 import torch
 import collections
 collections.Iterable = collections.abc.Iterable
-
 from dataloader import MnistDataloader
-from vit import VIT, train
+from vit import VIT, train, parameters
+from progressbar import progressbar
 from hyperparameters import *
-
+import random
 
 # load data
 dataloader = MnistDataloader(training_images_filepath='data/train_images', 
@@ -43,21 +43,42 @@ model = VIT(token_dim=TOKEN_DIM,
             n_class=N_CLASS,
             device=DEVICE)
 
-
-# move to gpu
-model = model.to(DEVICE)
-x_train = x_train.to(DEVICE) ; y_train = y_train.to(DEVICE)
-x_test = x_test.to(DEVICE) ; y_test = y_test.to(DEVICE)
-
 print()
 print(f"Training on: {DEVICE}")
 print()
+print(f"Number of parameters: {parameters(model)}")
+print()
 
-# train
+'''
+The following code on select a subset of train and test set
+'''
+data_size = 400
+train_idx = random.sample(range(x_train.shape[0]), data_size)
+test_idx = random.sample(range(x_test.shape[0]), int(data_size * 0.8))
+xtrain = torch.zeros((data_size, HEIGHT, WIDTH, CHANNEL), dtype=torch.float)
+ytrain = torch.zeros((data_size), dtype=torch.int8)
+xtest = torch.zeros((int(data_size * 0.8), HEIGHT, WIDTH, CHANNEL), dtype=torch.float)
+ytest = torch.zeros((int(data_size * 0.8)), dtype=torch.int8)
+
+for i in range(data_size):
+    xtrain[i] = x_train[i]
+    ytrain[i] = y_train[i]
+
+for i in range(int(data_size * 0.8)):
+    xtest[i] = x_test[i]
+    ytest[i] = y_test[i]
+
+# move to gpu
+model = model.to(DEVICE)
+xtrain = xtrain.to(DEVICE) ; ytrain = ytrain.to(DEVICE)
+xtest = xtest.to(DEVICE) ; ytest = ytest.to(DEVICE)
+
+
+# uncomment the following to train on whole data set
 train(model=model,
-      x_train=x_train,
-      y_train=y_train,
-      x_test=x_test,
-      y_test=y_test,
+      x_train=xtrain,
+      y_train=ytrain,
+      x_test=xtest,
+      y_test=ytest,
       epoch=EPOCH,
       lr=LR)

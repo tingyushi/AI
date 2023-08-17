@@ -77,8 +77,8 @@ class Head(nn.Module):
     
     def forward(self, x):
         k = self.key(x) ; v = self.value(x) ; q = self.query(x)
-        temp = q @ torch.transpose(k, -2, -1)
-        temp /= torch.sqrt(torch.tensor(self.head_size))
+        temp = q @ k.T
+        temp /= (self.head_size ** 0.5)
         weights = nn.functional.softmax(temp, dim=-1)
         out = weights @ v
         return out
@@ -118,7 +118,7 @@ class Block(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, token_dim, n_head, n_block) -> None:
+    def __init__(self, token_dim, n_head, n_block):
         super().__init__()
         self.token_dim = token_dim ; self.n_head = n_head
         self.n_block = n_block ; self.head_size = int(token_dim / n_head)
@@ -145,7 +145,6 @@ class VIT(nn.Module):
         
         self.pos_embedding = get_positional_embedding(num_of_token=self.n_of_token + 1, 
                                                       token_dim=self.token_dim)
-        self.pos_embedding.requires_grad = False
 
         self.encoder = Encoder(token_dim=self.token_dim,
                                n_head=self.n_head,
@@ -167,6 +166,7 @@ class VIT(nn.Module):
 
         x = self.pos_embedding + self.linearprojection(x)
         x = self.encoder(x)
+
         out = self.mlphead(x[0])
         out = nn.functional.softmax(out, dim=-1)
 
@@ -208,7 +208,7 @@ def estimate_loss(model, x, y):
 
 
 def train(model, x_train, y_train, x_test, y_test, epoch, lr):
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr)
     
     print()
     loss, accu = estimate_loss(model, x_train, y_train)
@@ -217,19 +217,13 @@ def train(model, x_train, y_train, x_test, y_test, epoch, lr):
     print(f"Loss and Accuracy on testing  set before training: {loss}, {accu}")
     print()
     
-    for i in range(epoch):
-        print(f"Epoch: {i + 1}")
-        for j in progressbar( range(x_train.shape[0]) ):
+    for _ in progressbar( range(epoch) ):
+        for j in range( x_train.shape[0]) :
             x = x_train[j] ; y = y_train[j]
             _, loss = model(x, y)
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
-        loss, accu = estimate_loss(model, x_train, y_train)
-        print(f"Loss and Accuracy on training set: {loss}, {accu}")
-        loss, accu = estimate_loss(model, x_test, y_test)
-        print(f"Loss and Accuracy on testing  set: {loss}, {accu}")
-        print()
 
     loss, accu = estimate_loss(model, x_train, y_train)
     print(f"Loss and Accuracy on training set after training: {loss}, {accu}")
@@ -240,3 +234,7 @@ def train(model, x_train, y_train, x_test, y_test, epoch, lr):
     print("Saving model ...")
     torch.save(model.state_dict(), 'trained_model/model')
     print("Model Saved ...")
+
+
+def parameters(model):
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
