@@ -42,11 +42,10 @@ def get_patches(data, patch_size):
 
 # Linear Projection of Flattened Patches
 class LinearProjection(nn.Module):
-    def __init__(self, patch_size, channel):
+    def __init__(self, patch_dim, token_dim):
         super().__init__()
-        self.linearprojection = nn.Linear(patch_size * patch_size * channel, 
-                                          patch_size * patch_size * channel)
-        self.class_token = nn.Parameter(torch.rand(1, patch_size * patch_size * channel))
+        self.linearprojection = nn.Linear(patch_dim, token_dim)
+        self.class_token = nn.Parameter(torch.rand(1, token_dim))
         
     def forward(self, x):  
         lp = self.linearprojection(x)
@@ -108,7 +107,9 @@ class Block(nn.Module):
         self.ln1 = nn.LayerNorm(token_dim)
         self.ln2 = nn.LayerNorm(token_dim)
         self.mha = MultiHead(token_dim, n_head)
-        self.mlp = nn.Linear(token_dim, token_dim)
+        self.mlp = nn.Sequential(nn.Linear(token_dim, token_dim * 4),
+                                 nn.GELU(),
+                                 nn.Linear(token_dim * 4, token_dim))
     
     def forward(self, x):
         x = x + self.mha(self.ln1(x))
@@ -139,12 +140,13 @@ class VIT(nn.Module):
         self.width = width ; self.n_of_token = int((self.height / self.patch_size) ** 2)
         self.n_class = n_class ; self.device = device
 
-        self.linearprojection = LinearProjection(patch_size=self.patch_size,
-                                                 channel=self.channel)
+        self.linearprojection = LinearProjection(patch_dim= self.patch_size * self.patch_size * self.channel,
+                                                 token_dim=self.token_dim)
         
         self.pos_embedding = get_positional_embedding(num_of_token=self.n_of_token + 1, 
                                                       token_dim=self.token_dim)
-        
+        self.pos_embedding.requires_grad = False
+
         self.encoder = Encoder(token_dim=self.token_dim,
                                n_head=self.n_head,
                                n_block=self.n_block)
