@@ -14,4 +14,4 @@ N_BLOCK = 8
 N_CLASS = 10
 EPOCH = 5
 LR = 1e-2
-DEVICE = 'mps' if torch.backends.mps.is_available() else 'cpu'
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
