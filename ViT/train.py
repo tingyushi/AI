@@ -26,12 +26,6 @@ x_test = np.array(x_test) ; x_test = torch.tensor(x_test, dtype=torch.float) ; x
 y_test = np.array(y_test) ; y_test = torch.tensor(y_test, dtype=torch.int8)
 
 
-'''
-# get a smaller size data 
-x_train = x_train[:50] ; y_train = y_train[:50]
-x_test = x_test[:50] ; y_test = y_test[:50]
-'''
-
 # create model
 model = VIT(token_dim=TOKEN_DIM, 
             n_head=N_HEAD,

@@ -20,7 +20,7 @@ y_test = np.array(y_test) ; y_test = torch.tensor(y_test, dtype=torch.int8)
 x_test = x_test.to(DEVICE) ; y_test = y_test.to(DEVICE)
 
 # create model
-model = VIT(token_dim=PATCH_DIM, 
+model = VIT(token_dim=TOKEN_DIM, 
             n_head=N_HEAD,
             n_block=N_BLOCK,
             patch_size=PATCH_SIZE,
