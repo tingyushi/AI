@@ -75,12 +75,13 @@ d_losses = []
 g_losses = []
 
 for epoch in range(EPOCHS):
-    print(f"Epoch: {epoch}")
+    print(f"Epoch: {epoch + 1}")
     for batch_idx in progressbar( range(num_of_batches) ):
         losses = gan_model.train_step(x_batch[batch_idx])
         d_losses.append(losses['dis_loss'])
         g_losses.append(losses['gen_loss'])
         if batch_idx == (num_of_batches - 1):
+            print()
             print(f"Discriminator Loss: {losses['dis_loss']} --- Generator Loss: {losses['gen_loss']}")
     print()
 
