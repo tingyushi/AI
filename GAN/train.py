@@ -5,6 +5,8 @@ from model import get_generator, get_discriminator, GAN
 from tensorflow.keras.optimizers.legacy import Adam 
 from tensorflow.keras.losses import BinaryCrossentropy
 from progressbar import progressbar
+import matplotlib.pyplot as plt
+
 
 # load data
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.fashion_mnist.load_data()
@@ -78,3 +80,14 @@ for epoch in range(EPOCHS):
         if batch_idx == (num_of_batches - 1):
             print(f"Discriminator Loss: {losses['dis_loss']} --- Generator Loss: {losses['gen_loss']}")
     print()
+
+
+# plot loss
+plt.plot(d_losses, label='d_loss')
+plt.plot(g_losses, label='g_loss')
+plt.title('Loss')
+plt.legend()
+plt.savefig('images/Loss.png')
+
+# save model
+gen.save('trained_model/generator.h5')

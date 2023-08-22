@@ -136,4 +136,4 @@ class GAN(tfm.Model):
         ggrad = g_tape .gradient(gen_loss, self.gen.trainable_variables)
         self.g_opt.apply_gradients(zip(ggrad, self.gen.trainable_variables))
         
-        return {"dis_loss": dis_loss, "gen_loss": gen_loss}
+        return {"dis_loss": dis_loss.numpy(), "gen_loss": gen_loss.numpy()}
