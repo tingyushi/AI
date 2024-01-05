@@ -140,3 +140,5 @@ dmypy.json
 *.lot
 *.nav
 *.out
+
+.DS_Store
